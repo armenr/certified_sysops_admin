@@ -55,3 +55,41 @@ Role-based access & controls for resources across AWS services is standard pract
   * Attach Policy: CloudWatchFullAccess
 
 **What does this do?** --> Creates a role that, when attached to an EC2, grants EC2's complete access to CloudWatch. 
+
+********
+
+### Monitoring EC2 With Custom Metrics (example)
+1. Instantiate new EC2 (micro is fine)
+2. "Configure Instance Details" --> IAM Role: CWEC2Role
+3. SSH your new host & `sudo su - ` (for ease - not a best practice!) 
+4. Update system & install prerequisite packages
+  * ` apt-get update && apt-get upgrade -y && apt-get install -y unzip libwww-perl libdatetime-perl`
+  *  `sudo yum install perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA -y && yum install zip unzip -y `
+5. Script download & installation - personally, I like putting optional package installs in '/opt/'
+
+		
+		mkdir -p /opt/aws/cloudwatch
+		curl http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip -O
+		unzip CloudWatchMonitoringScripts-1.2.1.zip
+		rm CloudWatchMonitoringScripts-1.2.1.zip
+		cd aws-scripts-mon
+		
+6. Verify that the magical scripts work. Yay PERL! PERL is still relevant!
+		
+		./mon-put-instance-data.pl --mem-util --verify --verbose
+	*With IAM roles utilized, you don't need to add access keys & such in the configs. You cannot retroactively append IAM roles to EC2 Instances. You will have to destroy & recreate an instance to take advantage of that.*
+	
+7. To post memory metrics to CloudWatch, try this.
+
+		./mon-put-instance-data.pl --mem-util --mem-used --mem-avail
+
+8. To run this every minute, set up a CRON job. It's easy. CRON is still relevant! 
+		
+		crontab -l > new_cron
+		echo "*/1 * * * * ~/aws-scripts-mon/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron" >> new_cron
+		crontab new_cron
+		rm new_cron
+		
+9. Hop back over to CloudWatch in the AWS Console and seek out your new metrics for that instance. Pretty graphs will take a short while (recurrent polling intervals) to show up.
+
+		
