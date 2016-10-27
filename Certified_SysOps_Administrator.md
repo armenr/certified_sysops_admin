@@ -169,4 +169,18 @@ Two types of monitoring for RDS
     * **SpillOverCount** - A count of the total number of requests that were *rejected* due to the queue being full (sum)
   * People build AutoScale groups & rules off of their SurgeQueueLength
   * Note: In the case of hosted Java apps in EC2 + TomCat sitting behind ELB's, it does make sense to autoscale on something like CPU. That being said, the CPU being pinned may be symptomatic of some other issue, like shitty GC's and JVM tuning. There are no hard & fast rules of thumb for autoscaling rules, as that is purpose-built in relation to the nature of the app sitting behind the ELB.
-    
+
+******
+
+### Monitoring Elasticache
+  * Caching engines
+    * memcached - multithreaded
+    * redis - single threaded
+  * Important metrics
+    * **CPU Utilization**
+      * Memcached: Can handle loads up to 90% before needing to be scaled (write a Lambda to script that)
+      * Redis: Divide 90 by the # of cores of your instance --> that's cpu % to scale at
+    * **Swap Usage**
+    * **Evictions**
+    * **Concurrent Connections**
+ 
