@@ -43,3 +43,15 @@ Welp, here go my notes. Most of this is knowledge I already possess. These are n
   * Corrupted file system
   * Incompatible kernel
   * **Typical path to resolution:** Bounce the EC2 with a restart, or make modifications to the OS.
+  
+*****
+
+### CloudWatch Roles
+Role-based access & controls for resources across AWS services is standard practice. In order to send custom metrics like RAM usage from an EC2 to CloudWatch, a correspondent role should be created in IAM to permit the EC2 resources the requisite privileges for sending metrics to CloudWatch.
+
+* Create IAM Role for CloudWatch
+  * Role Name: CWEC2Role
+  * Role Type: AWS Service Roles --> Amazon EC2
+  * Attach Policy: CloudWatchFullAccess
+
+**What does this do?** --> Creates a role that, when attached to an EC2, grants EC2's complete access to CloudWatch. 
