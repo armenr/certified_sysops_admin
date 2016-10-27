@@ -158,4 +158,15 @@ Two types of monitoring for RDS
     * **NetworkReceiveThroughput** - Incoming traffic
     * **NetworkTransmitThroughput** - Outgoing traffic
 
+******
+
+### Monitoring ELB
+  * ELB is monitored @ 60 second intervals
+  * Read up on metrics here - they're self-evident and you know them all.
+  	<https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-cloudwatch-metrics.html>
+  * Two particular gotcha's
+    * **SurgeQueueLength** - A count of the total number of requests that are pending submission to a registered instance (max)
+    * **SpillOverCount** - A count of the total number of requests that were *rejected* due to the queue being full (sum)
+  * People build AutoScale groups & rules off of their SurgeQueueLength
+  * Note: In the case of hosted Java apps in EC2 + TomCat sitting behind ELB's, it does make sense to autoscale on something like CPU. That being said, the CPU being pinned may be symptomatic of some other issue, like shitty GC's and JVM tuning. There are no hard & fast rules of thumb for autoscaling rules, as that is purpose-built in relation to the nature of the app sitting behind the ELB.
     
