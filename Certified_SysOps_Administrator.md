@@ -112,8 +112,8 @@ Types of storage:
   
   * Back-end storage blocks for EBS volumes are allocated immediately to any EBS volume, however those blocks are "cold." Volumes that need to perform the moment they are introducted into production require pre-warming first. There is an implicit 5-50% performance decrease on cold volumes, but in most applications this hit is ammortized reasonably over the course of that volume's use cycle. 
     * New volumes: blocks need to be wiped clean
-    * 
-    		sudo dd if=/dev/xvdf of=/dev/null bs=1M
+    
+     ``sudo dd if=/dev/xvdf of=/dev/null bs=1M ``
     		
     * Volumes from Restored snapshots: You have to read all the blocks on the volume
       * To pre-warm only existing blocks of written data on a restored snapshot volume:
@@ -128,3 +128,10 @@ Types of storage:
     * **impaired** - stalled or unaviable
     * **insufficient data** - no data present for the volume
 
+******
+
+### Monitoring RDS
+Two types of monitoring for RDS
+  
+  1. CloudWatch: monitor by metrics
+  2. RDS Console: monitor by events
