@@ -134,4 +134,28 @@ Types of storage:
 Two types of monitoring for RDS
   
   1. CloudWatch: monitor by metrics
-  2. RDS Console: monitor by events
+  2. RDS Console: metric graphs + events
+    * Event Subscriptions
+      * DB failover, config changes, low storage, maintenance, etc...
+  
+  * Important Metrics (for exam) -- skipping "credit" metrics
+    * **DatabaseConnections** - The number of database connections in use
+    * **DiskQueueDepth** (you want this to be zero) - The number of outstanding IOs (read/write requests) waiting to access the disk
+    * **FreeStorageSpace** - The amount of available storage space
+    * **ReplicaLag** - The amount of time a Read Replica DB instance lags behind the source DB instance. Applies to MySQL, MariaDB, and PostgreSQL Read Replicas (seconds)
+    * **ReadIOPS** - The average number of disk I/O read operations per second
+    * **WriteIOPS** - The average number of disk I/O write operations per second
+    * **ReadLatency** - The average amount of time taken per disk I/O operation
+    * **WriteLatency** - The average amount of time taken per disk I/O operation
+    
+  * Others
+    * **BinLogDiskUsage** - The amount of disk space occupied by binary logs on the master
+    * **CPUUtilization** - The percentage of CPU utilization
+    * **FreeableMemory** - The amount of available random access memory
+    * **SwapUsage** - The amount of swap space used on the DB instance
+    * **ReadThroughput** - Average number of bytes read from disk per second
+    * **WriteThroughput** - Average number of bytes written to disk per second
+    * **NetworkReceiveThroughput** - Incoming traffic
+    * **NetworkTransmitThroughput** - Outgoing traffic
+
+    
