@@ -25,4 +25,21 @@ Welp, here go my notes. Most of this is knowledge I already possess. These are n
 
 ### CloudWatch Alarms
 * You can set up custom alarms that will do things like send notifications when you hit billing thresholds.
-* You can set actions that can be taken in the event of a threshold breach/alarm state. 
+* You can set actions that can be taken in the event of a threshold breach/alarm state.
+
+*****
+
+### EC2 Status Checks
+* **System Status Checks:** Checks the underlying physical host (baremetal where your EC2 VM resides)
+  * Loss of network connectivity
+  * Loss of system power
+  * Software issues on the physical host
+  * Hardware issues on the physical host
+  * **Typical path to resolution:** Explicit stop/start the EC2 instance. The VM will restart on a different physical host under the AWS covers. 
+* **Instance Status Checks:** Checks the VM/EC2 instance itself
+  * Failed system status checks will trigger implicit instance status check failures
+  * Misconfigured networking or startup configuration
+  * Exhasuted memory
+  * Corrupted file system
+  * Incompatible kernel
+  * **Typical path to resolution:** Bounce the EC2 with a restart, or make modifications to the OS.
