@@ -1,6 +1,6 @@
 # AWS Certified SysOps Administrator - Associate
 
-Welp, here go my notes.
+Welp, here go my notes. Most of this is knowledge I already possess. These are notes to memorialize my formal study as it pertains to the certification. 
 
 ## Monitoring, Metrics & Analysis
 
