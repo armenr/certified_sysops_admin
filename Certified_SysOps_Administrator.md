@@ -1,6 +1,6 @@
 # AWS Certified SysOps Administrator - Associate
 
-Welp, here go my notes. Most of this is knowledge I already possess. These are notes to memorialize my formal study as it pertains to the certification. 
+Welp, here go my notes. Most of this is knowledge I already possess. These are notes to memorialize my formal study as it pertains to the certification curriculum. Refreshers never hurt.
 
 ## Monitoring, Metrics & Analysis
 
@@ -92,4 +92,39 @@ Role-based access & controls for resources across AWS services is standard pract
 		
 9. Hop back over to CloudWatch in the AWS Console and seek out your new metrics for that instance. Pretty graphs will take a short while (recurrent polling intervals) to show up.
 
-		
+******
+
+### Monitoring EBS Volumes
+Types of storage:
+
+  * Magnetic (yucky)
+  * General Purpose SSD
+  	* 3 IOPS/GB on your SSD
+  	* Up to 10K IOPS - go to Provisioned IOPS past that
+  	* When your volume does need more than the baseline IOPS, you use I/O credits in the credit balance, up to a mximum of 3K.
+  	* Each volume recieves an initial I/O credit balance of 5,400,000 credits
+  	* This sustains a maximum burst of 3K IOPS for 30 minutes
+  	* When staying below your provisioned I/O level (bursting), the volume earns credits
+  	* Bonus: How do you find out the number of credits you've earned? (Max is 5,400,000 credits)
+  * Provisioned IOPS SSD
+  
+  For further reading & use cases, go here: <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html>
+  
+  * Back-end storage blocks for EBS volumes are allocated immediately to any EBS volume, however those blocks are "cold." Volumes that need to perform the moment they are introducted into production require pre-warming first. There is an implicit 5-50% performance decrease on cold volumes, but in most applications this hit is ammortized reasonably over the course of that volume's use cycle. 
+    * New volumes: blocks need to be wiped clean
+    * 
+    		sudo dd if=/dev/xvdf of=/dev/null bs=1M
+    		
+    * Volumes from Restored snapshots: You have to read all the blocks on the volume
+      * To pre-warm only existing blocks of written data on a restored snapshot volume:
+    		`` sudo dd if=/dev/xvdX of=/dev/null bs=1`` 
+
+    	* To pre-warm existing blocks **and** empty blocks on a restored volume:
+    		`` sudo dd if=/dev/xvdX of=/dev/xvdX conv=notrunc bs=1M ``
+  * An important metric to remember is *VolumeQueueLength* - The number of read & write operations waiting to be completed in a specified period of time (e.g. - troubleshooting perf issues with a DB volume)
+  * Volume Status Checks:
+    * **ok** - everything is okay
+    * **warning** - degraded or severely degraded
+    * **impaired** - stalled or unaviable
+    * **insufficient data** - no data present for the volume
+
